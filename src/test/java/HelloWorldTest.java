@@ -13,16 +13,13 @@ import java.util.Optional;
 public class HelloWorldTest {
 
     @Test
-    public void testCheckAuthCookies() {
-        Map<String, String> body = new HashMap<>();
-        body.put("login","secret_login");
-        body.put("password","secret_pass");
+    public void testCheckRedirect() {
+
+    }
+    @Test
+    public void testCheckJsonParser() {
         JsonPath responseJson = RestAssured
                 .given()
-                .body(body)/*
-                .queryParam("param1","value1")
-                .queryParam("param2","value2")*/
-                /*.body("param1=value1&param2=value2")*/
                 .when()
                 .post("https://playground.learnqa.ru/api/get_json_homework")
                 .jsonPath();
