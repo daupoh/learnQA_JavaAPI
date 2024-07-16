@@ -16,11 +16,13 @@ public class HelloWorldTest {
     public void testCheckRedirect() {
         Response response = RestAssured
                 .given()
-                .redirects()
-                .follow(true)
+                    .redirects()
+                    .follow(false)
                 .when()
-                .get("https://playground.learnqa.ru/api/long_redirect")
+                    .get("https://playground.learnqa.ru/api/long_redirect")
                 .andReturn();
+        System.out.println("Redirect URL: "+response.getHeader("Location")+
+                "\nStatus code: "+response.getStatusCode());
     }
     @Test
     public void testCheckJsonParser() {
