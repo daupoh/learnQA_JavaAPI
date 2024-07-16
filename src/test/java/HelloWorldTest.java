@@ -14,14 +14,20 @@ public class HelloWorldTest {
 
     @Test
     public void testCheckRedirect() {
-
+        Response response = RestAssured
+                .given()
+                .redirects()
+                .follow(true)
+                .when()
+                .get("https://playground.learnqa.ru/api/long_redirect")
+                .andReturn();
     }
     @Test
     public void testCheckJsonParser() {
         JsonPath responseJson = RestAssured
                 .given()
                 .when()
-                .post("https://playground.learnqa.ru/api/get_json_homework")
+                .get("https://playground.learnqa.ru/api/get_json_homework")
                 .jsonPath();
         System.out.println("All second message item: "+responseJson.getList("messages").get(1));
         System.out.println("Only message text: "+responseJson.getString("messages[1].message"));
