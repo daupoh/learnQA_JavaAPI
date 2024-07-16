@@ -13,6 +13,53 @@ import java.util.Optional;
 public class HelloWorldTest {
 
     @Test
+    public void testCheckTokenJob() {
+        JsonPath responseJSON = RestAssured
+                .when()
+                    .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+        int seconds = responseJSON.get("seconds");
+        String token = responseJSON.getString("token");
+        System.out.println("Token: "+token
+                +"\nSeconds to comply:"+ seconds);
+        responseJSON = RestAssured
+                .given()
+                .queryParam("token",token)
+                .when()
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .jsonPath();
+        String status = responseJSON.get("status"),
+                error = responseJSON.get("error"),
+                result = responseJSON.get("result");
+        if (status.equals("Job is NOT ready")
+            && error==null
+            && result==null) {
+
+            System.out.println("Job sucessfully started");
+                try {
+                    Thread.sleep(seconds * 1000L);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                responseJSON = RestAssured
+                        .given()
+                        .queryParam("token", token)
+                        .when()
+                        .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                        .jsonPath();
+                status = responseJSON.get("status");
+                error = responseJSON.get("error");
+                result = responseJSON.get("result");
+                if (status.equals("Job is ready")
+                    && error==null
+                    && result!=null && !result.isEmpty()
+                )
+                    System.out.println("Job result is: "+result);
+            }
+        else
+            System.out.println("Job can't be started");
+    }
+    @Test
     public void testCheckLongRedirect() {
         Response response = RestAssured
                 .given()
