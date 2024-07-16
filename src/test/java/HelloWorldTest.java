@@ -13,6 +13,34 @@ import java.util.Optional;
 public class HelloWorldTest {
 
     @Test
+    public void testCheckLongRedirect() {
+        Response response = RestAssured
+                .given()
+                    .redirects()
+                    .follow(false)
+                .when()
+                    .get("https://playground.learnqa.ru/api/long_redirect")
+                .andReturn();
+        int statusCode = response.statusCode(),
+            counter=0;
+        String newLocation="";
+        while (statusCode!=200) {
+            newLocation = response.getHeader("Location");
+            counter++;
+            response = RestAssured
+                    .given()
+                        .redirects()
+                        .follow(false)
+                    .when()
+                        .get(newLocation)
+                    .andReturn();
+            statusCode = response.statusCode();
+        }
+        System.out.println("Final URL: "+newLocation+
+                "\nStatus code: "+statusCode +
+                "\nRedirects count: "+counter);
+    }
+    @Test
     public void testCheckRedirect() {
         Response response = RestAssured
                 .given()
