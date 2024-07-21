@@ -1,13 +1,21 @@
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import lib.Assertion;
 import org.junit.jupiter.api.Test;
 import io.restassured.RestAssured;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HelloWorldTest {
 
+    @ParameterizedTest
+    @ValueSource(strings = {"","123","some string","it's a really long string, it surely has more than 15 symbols!"})
+    public void testSomeString(String checkingStr) {
+        Assertion.assertStrHasLesserLen(checkingStr,15);
+    }
     @Test
     public void testCheckPasswordHack() {
         String[] passwords= new String[] {"password","123456","123456789","12345678","12345",
