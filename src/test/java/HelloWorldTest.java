@@ -154,11 +154,4 @@ public class HelloWorldTest {
         System.out.println("Only message text: "+responseJson.getString("messages[1].message"));
     }
 
-    /*@Test
-    public void testHelloWorld() {
-        Response response = RestAssured
-                .get("https://playground.learnqa.ru/api/hello")
-                .andReturn();
-        response.prettyPrint();
-    }*/
 }
