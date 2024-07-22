@@ -1,5 +1,6 @@
 package tests;
 
+import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import lib.Assertion;
@@ -16,6 +17,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HelloWorldTest {
 
+    @Test
+    public void testCheckHeadersRequest() {
+        /*String[] expHeaderNames =
+                new String[] {"Date","Content-Type","Content-Length","Connection",
+                        "Keep-Alive","Server","x-secret-homework-header","Cache-Control"
+                        ,"Expires"};*/
+        String expHeaderName="x-secret-homework-header",
+                expHeaderVal="Some secret value";
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/homework_header")
+                .andReturn();
+        Headers headers = response.getHeaders();
+        /*for (String s:expHeaderNames) {
+            assertTrue(headers.hasHeaderWithName(s),"Can't find header "+s);
+        }*/
+        assertTrue(headers.hasHeaderWithName(expHeaderName));
+        assertEquals(expHeaderVal,headers.getValue(expHeaderName),"Non valid header value");
+    }
     @Test
     public void testCheckCookieRequest() {
         String expCookieName = "HomeWork",
