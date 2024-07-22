@@ -1,3 +1,5 @@
+package tests;
+
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import lib.Assertion;
@@ -9,8 +11,23 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class HelloWorldTest {
 
+    @Test
+    public void testCheckCookieRequest() {
+        String expCookieName = "HomeWork",
+                expCookieVal = "hw_value";
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/api/homework_cookie")
+                .andReturn();
+        Map<String,String> cookies = response.getCookies();
+        assertTrue(cookies.containsKey(expCookieName));
+        assertEquals(expCookieVal,cookies.get(expCookieName),"Non valid cookie value");
+    }
     @ParameterizedTest
     @ValueSource(strings = {"","123","some string","it's a really long string, it surely has more than 15 symbols!"})
     public void testSomeString(String checkingStr) {
