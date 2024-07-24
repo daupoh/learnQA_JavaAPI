@@ -46,8 +46,8 @@ public class HelloWorldTest {
                 .headers(headers)
                 .get("https://playground.learnqa.ru/ajax/api/user_agent_check")
                 .andReturn();
-        System.out.println(String.format("Expected platform %s, browser %s and device %s",
-                platform,browser,device));
+        System.out.printf("Expected platform %s, browser %s and device %s%n",
+                platform,browser,device);
         response.prettyPrint();
         assertEquals(platform,response.jsonPath().getString("platform"),"Platform doesn't have expected value");
         assertEquals(browser,response.jsonPath().getString("browser"),"Browser doesn't have expected value");
