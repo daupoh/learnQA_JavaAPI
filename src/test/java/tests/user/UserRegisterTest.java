@@ -16,12 +16,10 @@ public class UserRegisterTest extends BaseTestCase {
         Map<String,String> userData = new HashMap<>();
         userData = DataGenerator.getRegistrationData();
 
-        Response responseCreateUser = RestAssured
-                .given()
-                .body(userData)
-                .post("https://playground.learnqa.ru/ajax/api/user/")
-                .andReturn();
-        //Assertion.assertResponseTextEquals(responseCreateUser,String.format("Users with email '%s' already exists",email));
+        Response responseCreateUser = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/ajax/api/user/",
+                userData
+        );
         Assertion.assertResponseCodeResult(responseCreateUser,200);
         Assertion.assertJsonHasKey(responseCreateUser,"id");
     }
@@ -32,12 +30,16 @@ public class UserRegisterTest extends BaseTestCase {
         userData.put("email",email);
         userData = DataGenerator.getRegistrationData(userData);
 
-        Response responseCreateUser = RestAssured
-                .given()
-                .body(userData)
-                .post("https://playground.learnqa.ru/ajax/api/user/")
-                .andReturn();
+        Response responseCreateUser = apiCoreRequests.makePostRequest(
+                "https://playground.learnqa.ru/ajax/api/user/",
+                userData
+        );
         Assertion.assertResponseTextEquals(responseCreateUser,String.format("Users with email '%s' already exists",email));
         Assertion.assertResponseCodeResult(responseCreateUser,400);
+    }
+
+    @Test
+    public void testCreateUserWithIncorrectEmail() {
+
     }
 }

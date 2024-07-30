@@ -24,7 +24,7 @@ public class UserAuthTest extends BaseTestCase {
     String cookie, header,
             userIdKey = "user_id";
     int userAuthID;
-    private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+
 
     @BeforeEach
     public void loginUser() {
