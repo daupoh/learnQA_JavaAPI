@@ -1,4 +1,4 @@
-package tests;
+package tests.user;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -14,13 +14,7 @@ public class UserRegisterTest extends BaseTestCase {
     @Test
     public void testCreateUserSuccesfully () {
         Map<String,String> userData = new HashMap<>();
-        String email = DataGenerator.getRandomEmail();
-
-        userData.put("email",email);
-        userData.put("password","123");
-        userData.put("username","learnqa");
-        userData.put("firstName","learnqa");
-        userData.put("lastName","learnqa");
+        userData = DataGenerator.getRegistrationData();
 
         Response responseCreateUser = RestAssured
                 .given()
@@ -35,12 +29,8 @@ public class UserRegisterTest extends BaseTestCase {
     public void testCreateUserWithExistingEmail () {
         Map<String,String> userData = new HashMap<>();
         String email = "vinkotov@example.com";
-
         userData.put("email",email);
-        userData.put("password","123");
-        userData.put("username","learnqa");
-        userData.put("firstName","learnqa");
-        userData.put("lastName","learnqa");
+        userData = DataGenerator.getRegistrationData(userData);
 
         Response responseCreateUser = RestAssured
                 .given()

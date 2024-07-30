@@ -9,6 +9,8 @@ import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BaseTestCase {
+    protected static String tokenHeaderName = "x-csrf-token",
+            authCookieName = "auth_sid";
     protected String getHeader(Response response, String name) {
         Headers headers = response.getHeaders();
         assertTrue(headers.hasHeaderWithName(name),"Response hasn't header with name "+name);
